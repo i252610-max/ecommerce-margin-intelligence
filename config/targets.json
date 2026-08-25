@@ -1,0 +1,29 @@
+{
+  "gymshark": {
+    "url": "https://www.gymshark.com/collections/t-shirts-tops/mens",
+    "pagination_type": "load_more_button",
+    "max_interactions": 1,
+    "headless": true,
+    "selectors": {
+      "card": "[class^='product-card_card-wrapper__']",
+      "title": "[data-testid^='plp-productTitle-']",
+      "price": "[data-testid^='plp-totalValue-']",
+      "load_more_btn": "[data-testid='plp-loadMore-select']"
+    },
+    "delays": { "min": 2.0, "max": 4.0 }
+  },
+"etsy": {
+  "url": "https://www.etsy.com/market/mechanical_keyboard",
+  "pagination_type": "url_parameter",
+  "pagination_url_format": "{url}?ref=pagination&page={page}",
+  "max_interactions": 1,
+  "headless": false,
+  "selectors": {
+    "card": "div.v2-listing-card",
+    "title": ".v2-listing-card__title",
+    "price": "p.lc-price .currency-value",
+    "next_page_btn": "a[data-page]"
+  },
+  "delays": { "min": 4.0, "max": 7.0 }
+}
+}
