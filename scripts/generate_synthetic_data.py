@@ -77,27 +77,59 @@ desk_names = [
 
 # Create 80% fitness, 20% desk
 num_fitness = int(40 * 0.8)  # 32
-num_desk = 40 - num_fitness     # 8
+num_desk = 40 - num_fitness   # 8
 
+# Utility to ensure unique product names
+used_names = set()
+fitness_variants = ["", " - Black", " - White", " - Navy", " - Heather Grey", " - Olive", " - Vintage Wash"]
+desk_variants = ["", " - Onyx Edition", " - Pro", " - Mini", " - Deluxe", " - Custom"]
+
+products = []
+
+# Generate fitness products
 for i in range(num_fitness):
     pid = f"P{i+1:03d}"
-    name = random.choice(fitness_names)
+    base_name = random.choice(fitness_names)
+    variant_index = 0
+    candidate = base_name
+    # Keep appending variants until we get a name not used before
+    while candidate in used_names:
+        variant_index += 1
+        if variant_index < len(fitness_variants):
+            candidate = f"{base_name}{fitness_variants[variant_index]}"
+        else:
+            # Fallback if all variants exhausted
+            candidate = f"{base_name} {variant_index}"
+    used_names.add(candidate)
+    name = candidate
+
     category = "Fitness Apparel"
-    # cost and selling price, with occasional bleeding
     cost = round(random.uniform(15, 50), 2)
     selling = round(cost * random.uniform(1.1, 2.0), 2)
-    # Make some bleeders: 4-5 products where cost > selling
-    if i < 5:  # first 5 are bleeders
+    # Make first 5 bleeders
+    if i < 5:
         selling = round(cost * random.uniform(0.8, 0.95), 2)
     products.append((pid, name, category, cost, selling))
 
+# Generate desk products
 for i in range(num_desk):
     pid = f"P{num_fitness + i + 1:03d}"
-    name = random.choice(desk_names)
+    base_name = random.choice(desk_names)
+    variant_index = 0
+    candidate = base_name
+    while candidate in used_names:
+        variant_index += 1
+        if variant_index < len(desk_variants):
+            candidate = f"{base_name}{desk_variants[variant_index]}"
+        else:
+            candidate = f"{base_name} {variant_index}"
+    used_names.add(candidate)
+    name = candidate
+
     category = "Desk Accessories"
     cost = round(random.uniform(20, 300), 2)
     selling = round(cost * random.uniform(1.1, 2.5), 2)
-    # maybe one bleeder
+    # Make first desk product a bleeder
     if i == 0:
         selling = round(cost * 0.85, 2)
     products.append((pid, name, category, cost, selling))
@@ -181,12 +213,14 @@ for cid, *rest in customers:
     all_orders.extend(orders)
 
 # If total orders < 3000, add more from random customers
+# If total orders < 3000, add more from random customers
+# Ensure extra orders are OLDER THAN the snapshot (>= 91 days ago) to avoid making churned customers look active.
 while len(all_orders) < 3000:
     cid = random.choice(customers)[0]
     product = random.choice(products)
     quantity = random.randint(1, 2)
     order_id = next_order_id()   # unique
-    order_date = fake.date_between(start_date="-540d", end_date="-1d")
+    order_date = fake.date_between(start_date="-540d", end_date="-91d")   # always before snapshot
     all_orders.append((order_id, cid, product[0], quantity, order_date.strftime("%Y-%m-%d"), product[4]))
 
 # Trim to exactly 3000 orders (IDs remain unique because they were assigned sequentially)

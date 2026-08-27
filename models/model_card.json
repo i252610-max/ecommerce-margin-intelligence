@@ -1,0 +1,32 @@
+{
+  "training_date": "2026-08-28 01:48:09",
+  "dataset_size": 250,
+  "train_size": 200,
+  "test_size": 50,
+  "churn_rate_total": 0.348,
+  "churn_rate_train": 0.35,
+  "churn_rate_test": 0.34,
+  "cv_accuracy_mean": 0.605,
+  "cv_accuracy_std": 0.09137833441248533,
+  "cv_recall_churned_mean": 0.5,
+  "cv_recall_churned_std": 0.14285714285714288,
+  "test_accuracy": 0.58,
+  "test_recall_churned": 0.5882352941176471,
+  "feature_order": [
+    "recency_days",
+    "frequency",
+    "monetary_avg",
+    "tenure_days",
+    "purchase_rhythm",
+    "recent_activity"
+  ],
+  "label_definition": "churn = no order in the 90-day window after snapshot",
+  "coefficient_story": {
+    "recency_days": 0.5301624399782742,
+    "frequency": -0.2590228631389005,
+    "monetary_avg": 0.11067307997378055,
+    "tenure_days": 0.29773986049435275,
+    "purchase_rhythm": -0.8530028232035202,
+    "recent_activity": -0.2274328313397011
+  }
+}
