@@ -1,15 +1,19 @@
+import sys
+from pathlib import Path
+
+# Add project root to sys.path so we can import analytics modules
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+
 import logging
 import sqlite3
 import pandas as pd
-from pathlib import Path
-import sys
 
-# Add project root to path to import analytics modules
-sys.path.append(str(Path(__file__).resolve().parent.parent))
 from analytics.profitability_analysis import run_profitability_analysis
 from analytics.score_customers import score_all_customers
+from analytics.margin_alerts import detect_margin_breaches
+from analytics.alert_dispatcher import dispatch_alerts
 
-# Setup logging
+# ---------- Logging setup ----------
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
@@ -19,6 +23,7 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger("master_pipeline")
+logger.propagate = False
 
 DB_PATH = "database/competitor_data.db"
 
@@ -74,13 +79,27 @@ def main():
     except Exception as e:
         logger.critical(f"Stage 2 failed: {e}", exc_info=True)
 
-    # Only print summary if both stages succeeded
-    if "Stage 1" and "Stage 2" in locals():
-        # We could check if both functions ran without raising; but since we caught exceptions, we can still show partial.
-        try:
-            executive_summary()
-        except Exception as e:
-            logger.error(f"Could not generate executive summary: {e}")
+    # Stage 3: Margin breach detection
+    try:
+        logger.info("Stage 3: Refreshing margin breach alerts...")
+        breaches, new, updated = detect_margin_breaches()
+        logger.info(f"Stage 3 completed: {breaches} breaches, {new} new, {updated} updated.")
+    except Exception as e:
+        logger.critical(f"Stage 3 failed: {e}", exc_info=True)
+
+    # Stage 4: Dispatch alerts
+    try:
+        logger.info("Stage 4: Dispatching margin breach alerts...")
+        dispatch_alerts()
+        logger.info("Stage 4 completed successfully.")
+    except Exception as e:
+        logger.critical(f"Stage 4 failed: {e}", exc_info=True)
+
+    # Executive summary (if at least one stage succeeded)
+    try:
+        executive_summary()
+    except Exception as e:
+        logger.error(f"Could not generate executive summary: {e}")
 
     logger.info("Master pipeline finished.")
 
