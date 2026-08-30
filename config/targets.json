@@ -2,7 +2,7 @@
   "gymshark": {
     "url": "https://www.gymshark.com/collections/t-shirts-tops/mens",
     "pagination_type": "load_more_button",
-    "max_interactions": 1,
+    "max_interactions": 3,
     "headless": true,
     "selectors": {
       "card": "[class^='product-card_card-wrapper__']",
@@ -16,7 +16,7 @@
   "url": "https://www.etsy.com/market/mechanical_keyboard",
   "pagination_type": "url_parameter",
   "pagination_url_format": "{url}?ref=pagination&page={page}",
-  "max_interactions": 1,
+  "max_interactions": 3,
   "headless": false,
   "selectors": {
     "card": "div.v2-listing-card",

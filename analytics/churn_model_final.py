@@ -106,7 +106,8 @@ model_card = {
     "label_definition": "churn = no order in the 90-day window after snapshot",
     "coefficient_story": {
         f: float(c) for f, c in zip(feature_cols, coefficients)
-    }
+    },
+    "risk_tiering_note": "Risk flags in scoring are percentile-based (top 15% HIGH, next 25% MEDIUM) because absolute probabilities from a small synthetic model are uncalibrated. This is a documented business decision."
 }
 with open(MODEL_CARD_PATH, "w") as f:
     json.dump(model_card, f, indent=2)

@@ -12,6 +12,7 @@ from analytics.profitability_analysis import run_profitability_analysis
 from analytics.score_customers import score_all_customers
 from analytics.margin_alerts import detect_margin_breaches
 from analytics.alert_dispatcher import dispatch_alerts
+from analytics.promote_matches import promote_matches
 
 # ---------- Logging setup ----------
 logging.basicConfig(
@@ -78,6 +79,15 @@ def main():
         logger.info("Stage 2 completed successfully.")
     except Exception as e:
         logger.critical(f"Stage 2 failed: {e}", exc_info=True)
+
+    
+        # Stage 2.5: Promote fuzzy matches
+    try:
+        logger.info("Stage 2.5: Promoting fuzzy matches...")
+        auto, review, disc = promote_matches()
+        logger.info(f"Stage 2.5 completed: {auto} auto, {review} needs_review, {disc} discarded.")
+    except Exception as e:
+        logger.critical(f"Stage 2.5 failed: {e}", exc_info=True)
 
     # Stage 3: Margin breach detection
     try:

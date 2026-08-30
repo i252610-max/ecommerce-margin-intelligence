@@ -36,10 +36,14 @@ def score_all_customers():
 
     # Build result DataFrame
     features["churn_probability"] = churn_proba
+    # Rank-based tiers: top 15% HIGH, next 25% MEDIUM, rest LOW
+    # This is a business decision, not a statistical absolute.
+    pct_rank = features["churn_probability"].rank(pct=True, method="first")
     features["risk_flag"] = pd.cut(
-        churn_proba,
-        bins=[-0.01, 0.35, 0.5, 1.0],
-        labels=["LOW", "MEDIUM", "HIGH"]
+        pct_rank,
+        bins=[0, 0.60, 0.85, 1.0],   # 0-60% LOW, 60-85% MEDIUM, 85-100% HIGH
+        labels=["LOW", "MEDIUM", "HIGH"],
+        include_lowest=True
     )
     features["scored_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 

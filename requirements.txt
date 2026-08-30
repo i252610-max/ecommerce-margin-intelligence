@@ -1,4 +1,8 @@
-pip install faker
-pip install pandas
-pip install scikit-learn
-pip install python-dotenv requests
+playwright
+playwright-stealth
+faker
+pandas
+scikit-learn
+python-dotenv
+requests
+rapidfuzz
