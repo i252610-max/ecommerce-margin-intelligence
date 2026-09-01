@@ -14,6 +14,7 @@ from analytics.margin_alerts import detect_margin_breaches
 from analytics.alert_dispatcher import dispatch_alerts
 from analytics.promote_matches import promote_matches
 
+
 # ---------- Logging setup ----------
 logging.basicConfig(
     level=logging.INFO,
@@ -104,6 +105,8 @@ def main():
         logger.info("Stage 4 completed successfully.")
     except Exception as e:
         logger.critical(f"Stage 4 failed: {e}", exc_info=True)
+
+    
 
     # Executive summary (if at least one stage succeeded)
     try:
