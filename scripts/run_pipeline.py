@@ -15,13 +15,20 @@ from analytics.alert_dispatcher import dispatch_alerts
 from analytics.promote_matches import promote_matches
 
 
+from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent.parent
+LOG_DIR = BASE_DIR / "logs"
+LOG_DIR.mkdir(exist_ok=True)
+
+
+
 # ---------- Logging setup ----------
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
     handlers=[
         logging.StreamHandler(),
-        logging.FileHandler("logs/master_pipeline.log")
+        logging.FileHandler(LOG_DIR / "master_pipeline.log")
     ]
 )
 logger = logging.getLogger("master_pipeline")
