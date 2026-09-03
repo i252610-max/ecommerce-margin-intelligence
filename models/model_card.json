@@ -1,5 +1,5 @@
 {
-  "training_date": "2026-08-28 01:48:09",
+  "training_date": "2026-09-04 00:15:38",
   "dataset_size": 250,
   "train_size": 200,
   "test_size": 50,
@@ -28,5 +28,6 @@
     "tenure_days": 0.29773986049435275,
     "purchase_rhythm": -0.8530028232035202,
     "recent_activity": -0.2274328313397011
-  }
+  },
+  "risk_tiering_note": "Risk flags in scoring are percentile-based (top 15% HIGH, next 25% MEDIUM) because absolute probabilities from a small synthetic model are uncalibrated. This is a documented business decision."
 }
